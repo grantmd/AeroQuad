@@ -289,7 +289,7 @@ public:
 /******************************************************/
 /********* AeroQuad Mini v1 Accelerometer *************/
 /******************************************************/
-#if defined(AeroQuad_Mini)
+#if defined(AeroQuad_Mini) || defined(AeroQuadMine)
 class Accel_AeroQuadMini : public Accel {
 private:
   int accelAddress;

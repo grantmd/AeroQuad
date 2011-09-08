@@ -435,6 +435,8 @@ void sendSerialTelemetry() {
     PrintValueComma(6);
 #elif defined(AeroQuad_Mini)
     PrintValueComma(2);
+#elif defined(AeroQuadMine)
+    PrintValueComma(2);
 #endif
     // Determine which motor flight configuration for Configurator GUI
 #if defined(plusConfig)

@@ -181,7 +181,7 @@ public:
 /******************************************************/
 /****************** AeroQuad_v2 Gyro ******************/
 /******************************************************/
-#if defined(AeroQuad_v18) || defined(AeroQuadMega_v2) || defined(AeroQuad_Mini)
+#if defined(AeroQuad_v18) || defined(AeroQuadMega_v2) || defined(AeroQuad_Mini) || defined(AeroQuadMine)
 /*
   10kOhm pull-ups on I2C lines.
   VDD & VIO = 3.3V
@@ -197,7 +197,7 @@ private:
   
 public:
   Gyro_AeroQuadMega_v2() : Gyro() {
-#ifdef AeroQuad_Mini
+#if defined(AeroQuad_Mini) || defined(AeroQuadMine)
     gyroAddress = 0x68;
 #else        
     gyroAddress = 0x69;
@@ -218,7 +218,7 @@ public:
     //gyroLastData = 0.0;  // initalize for rawHeading, may be able to be removed in the future
     
     // Check if gyro is connected
-#ifdef AeroQuad_Mini    
+#if defined(AeroQuad_Mini) || defined(AeroQuadMine)
     if (readWhoI2C(gyroAddress) != gyroAddress +1)  // hardcoded for +1 of address specific to sparkfun 6dof imu
 #else    
     if (readWhoI2C(gyroAddress) != gyroAddress)  // hardcoded for +1 of address specific to sparkfun 6dof imu
