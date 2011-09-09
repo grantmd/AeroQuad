@@ -48,6 +48,10 @@
   #define LED2PIN 4
   #define LED3PIN 31
 #else
+#ifdef AeroQuadMine  
+  #define LED2PIN 12
+  #define LED3PIN 31
+#endif
   #define LED2PIN 12
   #define LED3PIN 12
 #endif
