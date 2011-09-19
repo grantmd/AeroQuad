@@ -283,7 +283,8 @@ unsigned long fastTelemetryTime = 0;
                                   defined(AeroQuadMega_Wii)    || \
                                   defined(ArduCopter)          || \
                                   defined(AeroQuadMega_CHR6DM) || \
-                                  defined(APM_OP_CHR6DM))
+                                  defined(APM_OP_CHR6DM)       || \
+                                  defined(AeroQuadMine))
   #define SERIAL_BAUD       115200
   #define SERIAL_PRINT      Serial3.print
   #define SERIAL_PRINTLN    Serial3.println
