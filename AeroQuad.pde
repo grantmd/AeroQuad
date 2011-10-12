@@ -59,7 +59,7 @@
 // *******************************************************************************************************************************
 #define HeadingMagHold // Enables HMC5843 Magnetometer, gets automatically selected if CHR6DM is defined
 #define AltitudeHold // Enables BMP085 Barometer (experimental, use at your own risk)
-//#define BattMonitor //define your personal specs in BatteryMonitor.h! Full documentation with schematic there
+#define BattMonitor //define your personal specs in BatteryMonitor.h! Full documentation with schematic there
 //#define RateModeOnly // Use this if you only have a gyro sensor, this will disable any attitude modes.
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,11 +67,11 @@
 // If you only want DCM, then don't define either of the below
 // Use FlightAngleARG if you do not have a magnetometer, use DCM if you have a magnetometer installed
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//#define FlightAngleMARG // Experimental!  Fly at your own risk! Use this if you have a magnetometer installed and enabled HeadingMagHold above
+#define FlightAngleMARG // Experimental!  Fly at your own risk! Use this if you have a magnetometer installed and enabled HeadingMagHold above
 //#define FlightAngleARG // Use this if you do not have a magnetometer installed
 #define WirelessTelemetry  // Enables Wireless telemetry on Serial3  // Wireless telemetry enable
-//#define BinaryWrite // Enables fast binary transfer of flight data to Configurator
-//#define BinaryWritePID // Enables fast binary transfer of attitude PID data
+#define BinaryWrite // Enables fast binary transfer of flight data to Configurator
+#define BinaryWritePID // Enables fast binary transfer of attitude PID data
 //#define OpenlogBinaryWrite // Enables fast binary transfer to serial1 and openlog hardware
 
 // *******************************************************************************************************************************
@@ -228,6 +228,7 @@
   Gyro_AeroQuadMega_v2 gyro;
   Receiver_AeroQuadMega receiver;
   Motors_PWMtimer motors;
+  //Motors_PWM motors;
   #include "FlightAngle.h"
   #ifdef FlightAngleARG
     FlightAngle_ARG tempFlightAngle;
