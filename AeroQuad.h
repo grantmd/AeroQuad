@@ -51,9 +51,10 @@
 #ifdef AeroQuadMine  
   #define LED2PIN 12
   #define LED3PIN 31
-#endif
+#else
   #define LED2PIN 12
   #define LED3PIN 12
+#endif
 #endif
 
 // Basic axis definitions
