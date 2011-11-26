@@ -494,6 +494,38 @@ void sendSerialTelemetry() {
     SERIAL_PRINTLN();
 #endif
     break;
+  // This is my custom telemetry command
+  case '&':
+    PrintValueComma(deltaTime);
+    
+    PrintValueComma(degrees(flightAngle->getData(ROLL)));
+    PrintValueComma(degrees(flightAngle->getData(PITCH)));
+    SERIAL_PRINTLN((flightAngle->getDegreesHeading(YAW)));
+      
+    for (byte axis = ROLL; axis < LASTAXIS; axis++)
+      PrintValueComma(accel.getFlightData(axis));
+
+    for (byte axis = ROLL; axis < LASTAXIS; axis++)
+      PrintValueComma(gyro.getFlightData(axis));
+      
+    for (byte axis = XAXIS; axis < LASTAXIS; axis++)
+      PrintValueComma(compass.getRawData(axis));
+      
+    PrintValueComma(altitude.getData());
+    PrintValueComma(batteryMonitor.getData());
+    
+    PrintValueComma(receiver.getData(THROTTLE));
+    
+    for (byte motor = FRONT; motor < LASTMOTOR; motor++)
+      PrintValueComma(motors.getMotorCommand(motor));
+    
+    PrintValueComma((int)armed);
+    if (flightMode == STABLE)
+      PrintValueComma(2000);
+    if (flightMode == ACRO)
+      PrintValueComma(1000);
+    
+    break;
   }
 }
 
