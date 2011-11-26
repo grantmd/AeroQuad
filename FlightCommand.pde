@@ -84,7 +84,7 @@ void readPilotCommands() {
     flightMode = ACRO;
   #else
     // Check Mode switch for Acro or Stable
-    if (receiver.getRaw(MODE) > 1500) {
+    if (receiver.getRaw(MODE) > 1500 || defined(AeroQuadMine)) {
       if (flightMode == ACRO) {
         #if defined(AeroQuad_v18) || defined(AeroQuadMega_v2) || defined(AeroQuadMega_Wii) || defined(AeroQuadMine)
           digitalWrite(LED2PIN, HIGH);
@@ -114,7 +114,7 @@ void readPilotCommands() {
    #endif
   
   #ifdef AltitudeHold
-   if (receiver.getRaw(AUX) < 1750) {
+   if (receiver.getRaw(AUX) < 1750 || (defined(AeroQuadMine) && receiver.getRaw(MODE) < 1500)) {
      if (altitudeHold != ALTPANIC ) {  // check for special condition with manditory override of Altitude hold
        if (storeAltitude == ON) {
          holdAltitude = altitude.getData();
