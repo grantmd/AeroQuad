@@ -82,7 +82,7 @@ void readPilotCommands() {
   
   #ifdef RateModeOnly
     flightMode = ACRO;
-  #elseif defined(AeroQuadMine)
+  #elif defined(AeroQuadMine)
     if (flightMode == ACRO) {
       digitalWrite(LED2PIN, HIGH);
       zeroIntegralError();
@@ -121,7 +121,7 @@ void readPilotCommands() {
   
   #ifdef AltitudeHold
    #ifdef AeroQuadMine
-   if (receiver.getRaw(MODE) < 1500) {
+   if (receiver.getRaw(MODE) > 1500) {
    #else
    if (receiver.getRaw(AUX) < 1750) {
    #endif
