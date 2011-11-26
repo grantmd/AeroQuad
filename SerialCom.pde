@@ -500,7 +500,7 @@ void sendSerialTelemetry() {
     
     PrintValueComma(degrees(flightAngle->getData(ROLL)));
     PrintValueComma(degrees(flightAngle->getData(PITCH)));
-    SERIAL_PRINTLN((flightAngle->getDegreesHeading(YAW)));
+    PrintValueComma((flightAngle->getDegreesHeading(YAW)));
       
     for (byte axis = ROLL; axis < LASTAXIS; axis++)
       PrintValueComma(accel.getFlightData(axis));
@@ -512,6 +512,7 @@ void sendSerialTelemetry() {
       PrintValueComma(compass.getRawData(axis));
       
     PrintValueComma(altitude.getData());
+    PrintValueComma((int)altitudeHold);
     PrintValueComma(batteryMonitor.getData());
     
     PrintValueComma(receiver.getData(THROTTLE));
@@ -521,9 +522,9 @@ void sendSerialTelemetry() {
     
     PrintValueComma((int)armed);
     if (flightMode == STABLE)
-      PrintValueComma(2000);
+      SERIAL_PRINTLN(2000);
     if (flightMode == ACRO)
-      PrintValueComma(1000);
+      SERIAL_PRINTLN(1000);
     
     break;
   }
