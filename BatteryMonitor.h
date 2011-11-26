@@ -215,6 +215,7 @@ public:
   void lowBatteryEvent(byte level) {
     long currentBatteryTime = millis() - previousBatteryTime;
     if (level == OK) {
+      digitalWrite(LED3PIN, LOW);
       digitalWrite(BUZZERPIN, LOW);
       autoDescent = 0;
     }
