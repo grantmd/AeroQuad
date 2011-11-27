@@ -61,6 +61,7 @@
 #define AltitudeHold // Enables BMP085 Barometer (experimental, use at your own risk)
 #define BattMonitor //define your personal specs in BatteryMonitor.h! Full documentation with schematic there
 //#define RateModeOnly // Use this if you only have a gyro sensor, this will disable any attitude modes.
+#define GPS // If you have a serial GPS connected to Serial2
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // You must define *only* one of the following 2 flightAngle calculations
@@ -123,6 +124,39 @@
 #include "Accel.h"
 #include "Gyro.h"
 #include "Motors.h"
+
+#ifdef AeroQuadMine
+  Accel_AeroQuadMini accel;
+  Gyro_AeroQuadMega_v2 gyro;
+  Receiver_AeroQuadMega receiver;
+  Motors_PWMtimer motors;
+  //Motors_PWM motors;
+  #include "FlightAngle.h"
+  #ifdef FlightAngleARG
+    FlightAngle_ARG tempFlightAngle;
+  #elif defined FlightAngleMARG
+    FlightAngle_MARG tempFlightAngle;
+  #else
+    FlightAngle_DCM tempFlightAngle;
+  #endif
+  FlightAngle *flightAngle = &tempFlightAngle;
+  #ifdef HeadingMagHold
+    #include "Compass.h"
+    Magnetometer_HMC5843 compass;
+  #endif
+  #ifdef AltitudeHold
+    #include "Altitude.h"
+    Altitude_AeroQuad_v2 altitude;
+  #endif
+  #ifdef BattMonitor
+    #include "BatteryMonitor.h"
+    BatteryMonitor_AeroQuad batteryMonitor;
+  #endif
+  #ifdef CameraControl
+    #include "Camera.h"
+    Camera_AeroQuad camera;
+  #endif
+#endif
 
 // Create objects defined from Configuration Section above
 #ifdef AeroQuad_v1
@@ -213,39 +247,6 @@
     FlightAngle_DCM tempFlightAngle;
   #endif
   FlightAngle *flightAngle = &tempFlightAngle;
-  #ifdef BattMonitor
-    #include "BatteryMonitor.h"
-    BatteryMonitor_AeroQuad batteryMonitor;
-  #endif
-  #ifdef CameraControl
-    #include "Camera.h"
-    Camera_AeroQuad camera;
-  #endif
-#endif
-
-#ifdef AeroQuadMine
-  Accel_AeroQuadMini accel;
-  Gyro_AeroQuadMega_v2 gyro;
-  Receiver_AeroQuadMega receiver;
-  Motors_PWMtimer motors;
-  //Motors_PWM motors;
-  #include "FlightAngle.h"
-  #ifdef FlightAngleARG
-    FlightAngle_ARG tempFlightAngle;
-  #elif defined FlightAngleMARG
-    FlightAngle_MARG tempFlightAngle;
-  #else
-    FlightAngle_DCM tempFlightAngle;
-  #endif
-  FlightAngle *flightAngle = &tempFlightAngle;
-  #ifdef HeadingMagHold
-    #include "Compass.h"
-    Magnetometer_HMC5843 compass;
-  #endif
-  #ifdef AltitudeHold
-    #include "Altitude.h"
-    Altitude_AeroQuad_v2 altitude;
-  #endif
   #ifdef BattMonitor
     #include "BatteryMonitor.h"
     BatteryMonitor_AeroQuad batteryMonitor;
