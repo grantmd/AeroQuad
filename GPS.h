@@ -26,7 +26,6 @@
 #ifdef GPS
 
 TinyGPS gps;
-NewSoftSerial nss(13, 3);
 
 bool newdata;
 unsigned long start;
@@ -117,9 +116,9 @@ void gpsdump(TinyGPS &gps)
   
 bool feedgps()
 {
-  while (nss.available())
+  while (Serial2.available())
   {
-    if (gps.encode(nss.read()))
+    if (gps.encode(Serial2.read()))
       return true;
   }
   return false;
