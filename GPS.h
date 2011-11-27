@@ -1,3 +1,5 @@
+#include <TinyGPS.h>
+
 /*
   AeroQuad v2.5 Beta 1 - July 2011
   www.AeroQuad.com
