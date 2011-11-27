@@ -1,5 +1,3 @@
-#include <TinyGPS.h>
-
 /*
   AeroQuad v2.5 Beta 1 - July 2011
   www.AeroQuad.com
@@ -25,106 +23,123 @@
 /**************************************************************/
 // This is experimental, it is not yet functional
 
-#ifdef GPS
-
-TinyGPS gps;
-
-bool newdata;
-unsigned long start;
-
-void gpsdump(TinyGPS &gps);
-bool feedgps();
-void printFloat(double f, int digits = 2);
-
-void printFloat(double number, int digits)
-{
-  // Handle negative numbers
-  if (number < 0.0)
-  {
-     Serial.print('-');
-     number = -number;
+#ifdef UseGPS
+class GPS {
+public: 
+  TinyGPS gps;
+ 
+  GPS(void){ 
+    // this is the constructor of the object and must have the same name 
+    // can be used to initialize any of the variables declared above 
   }
 
-  // Round correctly so that print(1.999, 2) prints as "2.00"
-  double rounding = 0.5;
-  for (uint8_t i=0; i<digits; ++i)
-    rounding /= 10.0;
+  // **********************************************************************
+  // The following function calls must be defined inside any new subclasses
+  // **********************************************************************
+  void initialize(void); 
+  void gpsdump();
+  bool feedgps();
   
-  number += rounding;
-
-  // Extract the integer part of the number and print it
-  unsigned long int_part = (unsigned long)number;
-  double remainder = number - (double)int_part;
-  Serial.print(int_part);
-
-  // Print the decimal point, but only if there are digits beyond
-  if (digits > 0)
-    Serial.print("."); 
-
-  // Extract digits from the remainder one at a time
-  while (digits-- > 0)
+  // *********************************************************
+  // The following functions are common between all subclasses
+  // *********************************************************
+  void printFloat(double number, int digits)
   {
-    remainder *= 10.0;
-    int toPrint = int(remainder);
-    Serial.print(toPrint);
-    remainder -= toPrint; 
-  } 
-}
-
-void gpsdump(TinyGPS &gps)
-{
-  long lat, lon;
-  float flat, flon;
-  unsigned long age, date, time, chars;
-  int year;
-  byte month, day, hour, minute, second, hundredths;
-  unsigned short sentences, failed;
-
-  gps.get_position(&lat, &lon, &age);
-  Serial.print("Lat/Long(10^-5 deg): "); Serial.print(lat); Serial.print(", "); Serial.print(lon); 
-  Serial.print(" Fix age: "); Serial.print(age); Serial.println("ms.");
+    // Handle negative numbers
+    if (number < 0.0)
+    {
+       SERIAL_PRINT('-');
+       number = -number;
+    }
   
-  feedgps(); // If we don't feed the gps during this long routine, we may drop characters and get checksum errors
-
-  gps.f_get_position(&flat, &flon, &age);
-  Serial.print("Lat/Long(float): "); printFloat(flat, 5); Serial.print(", "); printFloat(flon, 5);
-  Serial.print(" Fix age: "); Serial.print(age); Serial.println("ms.");
-
-  feedgps();
-
-  gps.get_datetime(&date, &time, &age);
-  Serial.print("Date(ddmmyy): "); Serial.print(date); Serial.print(" Time(hhmmsscc): "); Serial.print(time);
-  Serial.print(" Fix age: "); Serial.print(age); Serial.println("ms.");
-
-  feedgps();
-
-  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
-  Serial.print("Date: "); Serial.print(static_cast<int>(month)); Serial.print("/"); Serial.print(static_cast<int>(day)); Serial.print("/"); Serial.print(year);
-  Serial.print("  Time: "); Serial.print(static_cast<int>(hour)); Serial.print(":"); Serial.print(static_cast<int>(minute)); Serial.print(":"); Serial.print(static_cast<int>(second)); Serial.print("."); Serial.print(static_cast<int>(hundredths));
-  Serial.print("  Fix age: ");  Serial.print(age); Serial.println("ms.");
+    // Round correctly so that print(1.999, 2) prints as "2.00"
+    double rounding = 0.5;
+    for (uint8_t i=0; i<digits; ++i)
+      rounding /= 10.0;
+    
+    number += rounding;
   
-  feedgps();
-
-  Serial.print("Alt(cm): "); Serial.print(gps.altitude()); Serial.print(" Course(10^-2 deg): "); Serial.print(gps.course()); Serial.print(" Speed(10^-2 knots): "); Serial.println(gps.speed());
-  Serial.print("Alt(float): "); printFloat(gps.f_altitude()); Serial.print(" Course(float): "); printFloat(gps.f_course()); Serial.println();
-  Serial.print("Speed(knots): "); printFloat(gps.f_speed_knots()); Serial.print(" (mph): ");  printFloat(gps.f_speed_mph());
-  Serial.print(" (mps): "); printFloat(gps.f_speed_mps()); Serial.print(" (kmph): "); printFloat(gps.f_speed_kmph()); Serial.println();
-
-  feedgps();
-
-  gps.stats(&chars, &sentences, &failed);
-  Serial.print("Stats: characters: "); Serial.print(chars); Serial.print(" sentences: "); Serial.print(sentences); Serial.print(" failed checksum: "); Serial.println(failed);
-}
+    // Extract the integer part of the number and print it
+    unsigned long int_part = (unsigned long)number;
+    double remainder = number - (double)int_part;
+    SERIAL_PRINT(int_part);
   
-bool feedgps()
-{
-  while (Serial2.available())
-  {
-    if (gps.encode(Serial2.read()))
-      return true;
+    // Print the decimal point, but only if there are digits beyond
+    if (digits > 0)
+      SERIAL_PRINT("."); 
+  
+    // Extract digits from the remainder one at a time
+    while (digits-- > 0)
+    {
+      remainder *= 10.0;
+      int toPrint = int(remainder);
+      SERIAL_PRINT(toPrint);
+      remainder -= toPrint; 
+    } 
   }
-  return false;
-}
+};
+
+
+class SerialGPS : public GPS { 
+public:
+  SerialGPS() : GPS(){
+  }
+  
+  void gpsdump()
+  {
+    long lat, lon;
+    float flat, flon;
+    unsigned long age, date, time, chars;
+    int year;
+    byte month, day, hour, minute, second, hundredths;
+    unsigned short sentences, failed;
+  
+    gps.get_position(&lat, &lon, &age);
+    SERIAL_PRINT("Lat/Long(10^-5 deg): "); SERIAL_PRINT(lat); SERIAL_PRINT(", "); SERIAL_PRINT(lon); 
+    SERIAL_PRINT(" Fix age: "); SERIAL_PRINT(age); SERIAL_PRINTLN("ms.");
+    
+    feedgps(); // If we don't feed the gps during this long routine, we may drop characters and get checksum errors
+  
+    gps.f_get_position(&flat, &flon, &age);
+    SERIAL_PRINT("Lat/Long(float): "); printFloat(flat, 5); SERIAL_PRINT(", "); printFloat(flon, 5);
+    SERIAL_PRINT(" Fix age: "); SERIAL_PRINT(age); SERIAL_PRINTLN("ms.");
+  
+    feedgps();
+  
+    gps.get_datetime(&date, &time, &age);
+    SERIAL_PRINT("Date(ddmmyy): "); SERIAL_PRINT(date); SERIAL_PRINT(" Time(hhmmsscc): "); SERIAL_PRINT(time);
+    SERIAL_PRINT(" Fix age: "); SERIAL_PRINT(age); SERIAL_PRINTLN("ms.");
+  
+    feedgps();
+  
+    gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
+    SERIAL_PRINT("Date: "); SERIAL_PRINT(static_cast<int>(month)); SERIAL_PRINT("/"); SERIAL_PRINT(static_cast<int>(day)); SERIAL_PRINT("/"); SERIAL_PRINT(year);
+    SERIAL_PRINT("  Time: "); SERIAL_PRINT(static_cast<int>(hour)); SERIAL_PRINT(":"); SERIAL_PRINT(static_cast<int>(minute)); SERIAL_PRINT(":"); SERIAL_PRINT(static_cast<int>(second)); SERIAL_PRINT("."); SERIAL_PRINT(static_cast<int>(hundredths));
+    SERIAL_PRINT("  Fix age: ");  SERIAL_PRINT(age); SERIAL_PRINTLN("ms.");
+    
+    feedgps();
+  
+    SERIAL_PRINT("Alt(cm): "); SERIAL_PRINT(gps.altitude()); SERIAL_PRINT(" Course(10^-2 deg): "); SERIAL_PRINT(gps.course()); SERIAL_PRINT(" Speed(10^-2 knots): "); SERIAL_PRINTLN(gps.speed());
+    SERIAL_PRINT("Alt(float): "); printFloat(gps.f_altitude(), 2); SERIAL_PRINT(" Course(float): "); printFloat(gps.f_course(), 2); SERIAL_PRINTLN();
+    SERIAL_PRINT("Speed(knots): "); printFloat(gps.f_speed_knots(), 2); SERIAL_PRINT(" (mph): ");  printFloat(gps.f_speed_mph(), 2);
+    SERIAL_PRINT(" (mps): "); printFloat(gps.f_speed_mps(), 2); SERIAL_PRINT(" (kmph): "); printFloat(gps.f_speed_kmph(), 2); SERIAL_PRINTLN();
+  
+    feedgps();
+  
+    gps.stats(&chars, &sentences, &failed);
+    SERIAL_PRINT("Stats: characters: "); SERIAL_PRINT(chars); SERIAL_PRINT(" sentences: "); SERIAL_PRINT(sentences); SERIAL_PRINT(" failed checksum: "); SERIAL_PRINTLN(failed);
+  }
+  
+  bool feedgps()
+  {
+    while (Serial2.available())
+    {
+      if (gps.encode(Serial2.read()))
+        return true;
+    }
+    return false;
+  }
+};
 
 #endif
 

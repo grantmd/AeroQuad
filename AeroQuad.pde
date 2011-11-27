@@ -61,7 +61,7 @@
 #define AltitudeHold // Enables BMP085 Barometer (experimental, use at your own risk)
 #define BattMonitor //define your personal specs in BatteryMonitor.h! Full documentation with schematic there
 //#define RateModeOnly // Use this if you only have a gyro sensor, this will disable any attitude modes.
-#define GPS // If you have a serial GPS connected to Serial2
+#define UseGPS // If you have a serial GPS connected to Serial2
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // You must define *only* one of the following 2 flightAngle calculations
@@ -115,6 +115,7 @@
 
 #include <EEPROM.h>
 #include <Wire.h>
+#include <TinyGPS.h>
 #include "AeroQuad.h"
 #include "I2C.h"
 #include "PID.h"
@@ -124,7 +125,6 @@
 #include "Accel.h"
 #include "Gyro.h"
 #include "Motors.h"
-#include "GPS.h"
 
 #ifdef AeroQuadMine
   Accel_AeroQuadMini accel;
@@ -156,6 +156,10 @@
   #ifdef CameraControl
     #include "Camera.h"
     Camera_AeroQuad camera;
+  #endif
+  #ifdef UseGPS
+    #include "GPS.h"
+    SerialGPS gps;
   #endif
 #endif
 
@@ -607,7 +611,7 @@ void setup() {
   #endif
   
   // GPS
-  #ifdef GPS
+  #ifdef UseGPS
     Serial2.begin(57600);
   #endif    
   
@@ -768,6 +772,10 @@ void loop () {
         #ifdef AltitudeHold
           altitude.measure(); // defined in altitude.h
         #endif
+        #ifdef UseGPS
+          if (gps.feedgps())
+            gps.gpsdump();
+        #endif
       }
 
       #if defined(CameraControl)
@@ -831,11 +839,6 @@ void loop () {
       #ifdef DEBUG_LOOP
         digitalWrite(8, LOW);
       #endif
- 
-      #ifdef GPS
-        if (feedgps())
-          gpsdump(gps);
-      #endif     
 	}
 
     previousTime = currentTime;
