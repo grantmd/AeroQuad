@@ -124,6 +124,7 @@
 #include "Accel.h"
 #include "Gyro.h"
 #include "Motors.h"
+#include "GPS.h"
 
 #ifdef AeroQuadMine
   Accel_AeroQuadMini accel;
@@ -605,6 +606,11 @@ void setup() {
     #endif 
   #endif
   
+  // GPS
+  #ifdef GPS
+    Serial2.begin(57600);
+  #endif    
+  
   // AKA use a new low pass filter called a Lag Filter uncomment only if using DCM LAG filters
   //  setupFilters(accel.accelOneG);
 
@@ -824,7 +830,12 @@ void loop () {
 
       #ifdef DEBUG_LOOP
         digitalWrite(8, LOW);
-      #endif      
+      #endif
+ 
+      #ifdef GPS
+        if (feedgps())
+          gpsdump(gps);
+      #endif     
 	}
 
     previousTime = currentTime;
