@@ -515,6 +515,11 @@ void sendSerialTelemetry() {
     PrintValueComma((int)altitudeHold);
     PrintValueComma(batteryMonitor.getData());
     
+    PrintValueComma(gps.getLat());
+    PrintValueComma(gps.getLon());
+    PrintValueComma(gps.getCourse());
+    PrintValueComma(gps.getAltitude());
+    
     PrintValueComma(receiver.getData(THROTTLE));
     
     for (byte motor = FRONT; motor < LASTMOTOR; motor++)
