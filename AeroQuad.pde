@@ -773,8 +773,7 @@ void loop () {
           altitude.measure(); // defined in altitude.h
         #endif
         #ifdef UseGPS
-          if (gps.feedgps())
-            gps.gpsdump();
+          gps.feedgps(); // defined in GPS.h
         #endif
       }
 
