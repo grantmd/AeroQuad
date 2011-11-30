@@ -29,7 +29,7 @@ private:
   bool has_fix;
   
   float lat, lon, course, altitude;
-  unsigned long fix_age;
+  unsigned long fix_age, last_update;
   
 protected:
   TinyGPS gps;
@@ -45,6 +45,8 @@ protected:
     
     course = gps.f_course();
     altitude = gps.f_altitude();
+    
+    last_update = millis();
   }
   
 public: 
@@ -69,6 +71,8 @@ public:
   const float getAltitude(){ return altitude; }
   
   const bool hasFix(){ return has_fix; }
+  const unsigned long getFixAge(){ return fix_age; }
+  const unsigned long getLastUpdate(){ return last_update; }
 };
 
 

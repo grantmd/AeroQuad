@@ -521,6 +521,9 @@ void sendSerialTelemetry() {
     PrintValueComma(gps.getCourse());
     PrintValueComma(gps.getAltitude());
     
+    //PrintValueComma((unsigned long)gps.getFixAge());
+    //PrintValueComma((unsigned long)gps.getLastUpdate());
+    
     PrintValueComma(receiver.getData(THROTTLE));
     
     for (byte motor = FRONT; motor < LASTMOTOR; motor++)
