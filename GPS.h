@@ -28,14 +28,14 @@ class GPS {
 private:
   bool has_fix;
   
-  long lat, lon, course, altitude;
+  float lat, lon, course, altitude;
   unsigned long fix_age;
   
 protected:
   TinyGPS gps;
   
   void update(void){
-    gps.get_position(&lat, &lon, &fix_age);
+    gps.f_get_position(&lat, &lon, &fix_age);
     if (fix_age == TinyGPS::GPS_INVALID_AGE)
       has_fix = false;
     else if (fix_age > 5000)
@@ -43,8 +43,8 @@ protected:
     else
       has_fix = true;
     
-    course = gps.course();
-    altitude = gps.altitude();
+    course = gps.f_course();
+    altitude = gps.f_altitude();
   }
   
 public: 
@@ -62,11 +62,11 @@ public:
   // The following functions are common between all subclasses
   // *********************************************************
   
-  const long getLat(){ return lat; }
-  const long getLon(){ return lon; }
+  const float getLat(){ return lat; }
+  const float getLon(){ return lon; }
   
-  const long getCourse(){ return course; }
-  const long getAltitude(){ return altitude; }
+  const float getCourse(){ return course; }
+  const float getAltitude(){ return altitude; }
 };
 
 
