@@ -71,8 +71,8 @@
 #define FlightAngleMARG // Experimental!  Fly at your own risk! Use this if you have a magnetometer installed and enabled HeadingMagHold above
 //#define FlightAngleARG // Use this if you do not have a magnetometer installed
 #define WirelessTelemetry  // Enables Wireless telemetry on Serial3  // Wireless telemetry enable
-#define BinaryWrite // Enables fast binary transfer of flight data to Configurator
-#define BinaryWritePID // Enables fast binary transfer of attitude PID data
+//#define BinaryWrite // Enables fast binary transfer of flight data to Configurator
+//#define BinaryWritePID // Enables fast binary transfer of attitude PID data
 //#define OpenlogBinaryWrite // Enables fast binary transfer to serial1 and openlog hardware
 
 // *******************************************************************************************************************************
@@ -826,8 +826,7 @@ void loop () {
         processAltitudeHold();
       }
       // Listen for configuration commands and reports telemetry
-      // FIXME: Temporary hack to make telemetry run at 1 Hz
-      if (telemetryLoop == ON && frameCounter %  100 == 0) {
+      if (telemetryLoop == ON) {
         readSerialCommand(); // defined in SerialCom.pde
         sendSerialTelemetry(); // defined in SerialCom.pde
       }

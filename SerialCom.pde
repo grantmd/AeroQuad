@@ -528,9 +528,9 @@ void sendSerialTelemetry() {
     
     PrintValueComma((int)armed);
     if (flightMode == STABLE)
-      SERIAL_PRINTLN(2000);
+      SERIAL_PRINTLN(2);
     if (flightMode == ACRO)
-      SERIAL_PRINTLN(1000);
+      SERIAL_PRINTLN(1);
     
     break;
   }
