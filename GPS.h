@@ -71,7 +71,7 @@ public:
   const float getAltitude(){ return altitude; }
   
   const bool hasFix(){ return has_fix; }
-  const unsigned long getFixAge(){ return fix_age; }
+  const unsigned long getFixAge(){ return fix_age + (millis() - last_update); }
   const unsigned long getLastUpdate(){ return last_update; }
 };
 
@@ -84,8 +84,10 @@ public:
   // Read serial data off of the gps, run it through tinygps
   // Update values and return true if we successfully decoded a sentence
   const bool feedgps(){
+    
     while (Serial2.available()){
-      if (gps.encode(Serial2.read()))
+      char c = Serial2.read();
+      if (gps.encode(c))
         update();
         return true;
     }

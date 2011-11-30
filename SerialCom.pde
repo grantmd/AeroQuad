@@ -516,13 +516,11 @@ void sendSerialTelemetry() {
     PrintValueComma(batteryMonitor.getData());
     
     PrintValueComma((int)gps.hasFix());
+    PrintValueComma((unsigned long)gps.getFixAge());
     PrintValueComma(gps.getLat());
     PrintValueComma(gps.getLon());
     PrintValueComma(gps.getCourse());
     PrintValueComma(gps.getAltitude());
-    
-    //PrintValueComma((unsigned long)gps.getFixAge());
-    //PrintValueComma((unsigned long)gps.getLastUpdate());
     
     PrintValueComma(receiver.getData(THROTTLE));
     
