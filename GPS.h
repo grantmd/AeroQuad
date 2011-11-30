@@ -67,6 +67,8 @@ public:
   
   const float getCourse(){ return course; }
   const float getAltitude(){ return altitude; }
+  
+  const bool hasFix(){ return has_fix; }
 };
 
 

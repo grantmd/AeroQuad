@@ -515,6 +515,7 @@ void sendSerialTelemetry() {
     PrintValueComma((int)altitudeHold);
     PrintValueComma(batteryMonitor.getData());
     
+    PrintValueComma((int)gps.hasFix());
     PrintValueComma(gps.getLat());
     PrintValueComma(gps.getLon());
     PrintValueComma(gps.getCourse());
