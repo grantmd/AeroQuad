@@ -826,7 +826,8 @@ void loop () {
         processAltitudeHold();
       }
       // Listen for configuration commands and reports telemetry
-      if (telemetryLoop == ON) {
+      // FIXME: Temporary hack to make telemetry run at 1 Hz
+      if (telemetryLoop == ON && frameCounter %  100 == 0) {
         readSerialCommand(); // defined in SerialCom.pde
         sendSerialTelemetry(); // defined in SerialCom.pde
       }
