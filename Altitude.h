@@ -114,11 +114,11 @@ private:
     sendByteI2C(altitudeAddress, 0xF6);
     Wire.requestFrom(altitudeAddress, 3); // request three bytes
     while(!Wire.available()); // wait until data available
-    msb = Wire.receive();
+    msb = Wire.read();
     while(!Wire.available()); // wait until data available
-    lsb = Wire.receive();
+    lsb = Wire.read();
     while(!Wire.available()); // wait until data available
-    xlsb = Wire.receive();
+    xlsb = Wire.read();
     return (((long)msb<<16) | ((long)lsb<<8) | ((long)xlsb)) >>(8-overSamplingSetting);
   }
 

@@ -238,9 +238,9 @@ public:
 
     for (byte axis = ROLL; axis < LASTAXIS; axis++) {
       if (axis == ROLL)
-        gyroADC[axis] = ((Wire.receive() << 8) | Wire.receive()) - gyroZero[axis];
+        gyroADC[axis] = ((Wire.read() << 8) | Wire.read()) - gyroZero[axis];
       else
-        gyroADC[axis] = gyroZero[axis] - ((Wire.receive() << 8) | Wire.receive());
+        gyroADC[axis] = gyroZero[axis] - ((Wire.read() << 8) | Wire.read());
       gyroData[axis] = filterSmooth((float)gyroADC[axis] * gyroScaleFactor, gyroData[axis], smoothFactor);
     }
 

@@ -157,9 +157,9 @@ public:
     sendByteI2C(compassAddress, 0x03);
     Wire.requestFrom(compassAddress, 6);
 
-    measuredMagX =  ((Wire.receive() << 8) | Wire.receive()) * magCalibration[XAXIS];
-    measuredMagY = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[YAXIS];
-    measuredMagZ = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[ZAXIS];
+    measuredMagX =  ((Wire.read() << 8) | Wire.read()) * magCalibration[XAXIS];
+    measuredMagY = -((Wire.read() << 8) | Wire.read()) * magCalibration[YAXIS];
+    measuredMagZ = -((Wire.read() << 8) | Wire.read()) * magCalibration[ZAXIS];
 
     Wire.endTransmission();
 
