@@ -624,7 +624,7 @@ void setup() {
   #endif
   
   #ifdef UAVTALK
-    UAVTalkSetup();
+    UAVTalkSetup(); // defined in UAVTalk.pde
   #endif
   
   // AKA use a new low pass filter called a Lag Filter uncomment only if using DCM LAG filters
@@ -840,9 +840,7 @@ void loop () {
       // Listen for configuration commands and reports telemetry
       if (telemetryLoop == ON) {
         #ifdef UAVTALK
-          if (SERIAL_AVAILABLE()) {
-            UAVTalkProcessInputStream(SERIAL_READ());
-          }
+          UAVTalkProcess(); // defined in UAVTalk.pde
         #else
           readSerialCommand(); // defined in SerialCom.pde
           sendSerialTelemetry(); // defined in SerialCom.pde

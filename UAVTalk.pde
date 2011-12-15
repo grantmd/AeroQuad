@@ -34,4 +34,12 @@ void UAVTalkSetup() {
  GCSTelemetryStatsConnectCallback(ObjEventCallback);
 }
 
+void UAVTalkProcess(){
+  if (SERIAL_AVAILABLE()) {
+    digitalWrite(LEDPIN, LOW);
+    UAVTalkProcessInputStream(SERIAL_READ());
+    digitalWrite(LEDPIN, HIGH);
+  }
+}
+
 #endif
