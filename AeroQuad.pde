@@ -74,6 +74,7 @@
 //#define BinaryWrite // Enables fast binary transfer of flight data to Configurator
 //#define BinaryWritePID // Enables fast binary transfer of attitude PID data
 //#define OpenlogBinaryWrite // Enables fast binary transfer to serial1 and openlog hardware
+#define UAVTalk // Speak the UAVTalk protocol over the serial connection
 
 // *******************************************************************************************************************************
 // Define how many channels that are connected from your R/C receiver
@@ -125,6 +126,13 @@
 #include "Accel.h"
 #include "Gyro.h"
 #include "Motors.h"
+
+#ifdef UAVTalk
+  #include <PIOS_CRC.h>
+  #include <UAVTalk.h>
+  #include <UAVObj.h>
+  #include <UAVObjects.h>
+#endif
 
 #ifdef AeroQuadMine
   Accel_AeroQuadMini accel;
@@ -613,7 +621,11 @@ void setup() {
   // GPS
   #ifdef UseGPS
     Serial2.begin(57600);
-  #endif    
+  #endif
+  
+  #ifdef UAVTALK
+    UAVTalkSetup();
+  #endif
   
   // AKA use a new low pass filter called a Lag Filter uncomment only if using DCM LAG filters
   //  setupFilters(accel.accelOneG);
@@ -827,8 +839,14 @@ void loop () {
       }
       // Listen for configuration commands and reports telemetry
       if (telemetryLoop == ON) {
-        readSerialCommand(); // defined in SerialCom.pde
-        sendSerialTelemetry(); // defined in SerialCom.pde
+        #ifdef UAVTALK
+          if (SERIAL_AVAILABLE()) {
+            UAVTalkProcessInputStream(SERIAL_READ());
+          }
+        #else
+          readSerialCommand(); // defined in SerialCom.pde
+          sendSerialTelemetry(); // defined in SerialCom.pde
+        #endif
       }
       
       #ifdef MAX7456_OSD
