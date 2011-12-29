@@ -26,9 +26,9 @@
 // Flight Software Version
 #define VERSION 2.5
 
-#define BAUD 115200
+//#define BAUD 115200
 //#define BAUD 111111 // use this to be compatible with USB and XBee connections
-//#define BAUD 57600
+#define BAUD 57600
 #define LEDPIN 13
 #define ON 1
 #define OFF 0
@@ -286,21 +286,23 @@ unsigned long fastTelemetryTime = 0;
                                   defined(AeroQuadMega_CHR6DM) || \
                                   defined(APM_OP_CHR6DM)       || \
                                   defined(AeroQuadMine))
-  #define SERIAL_BAUD       115200
+  #define SERIAL_BAUD       57600
   #define SERIAL_PRINT      Serial3.print
   #define SERIAL_PRINTLN    Serial3.println
   #define SERIAL_AVAILABLE  Serial3.available
   #define SERIAL_READ       Serial3.read
   #define SERIAL_FLUSH      Serial3.flush
   #define SERIAL_BEGIN      Serial3.begin
+  #define SERIAL_WRITE      Serial3.write
 #else
-  #define SERIAL_BAUD       115200
+  #define SERIAL_BAUD       57600
   #define SERIAL_PRINT      Serial.print
   #define SERIAL_PRINTLN    Serial.println
   #define SERIAL_AVAILABLE  Serial.available
   #define SERIAL_READ       Serial.read
   #define SERIAL_FLUSH      Serial.flush
   #define SERIAL_BEGIN      Serial.begin
+  #define SERIAL_WRITE      Serial.write
 #endif
 
 /**************************************************************/

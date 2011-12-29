@@ -127,12 +127,10 @@
 #include "Gyro.h"
 #include "Motors.h"
 
-#ifdef UAVTalk
-  #include <PIOS_CRC.h>
-  #include <UAVTalk.h>
-  #include <UAVObj.h>
-  #include <UAVObjects.h>
-#endif
+#include <PIOS_CRC.h>
+#include <UAVTalk.h>
+#include <UAVObj.h>
+#include <UAVObjects.h>
 
 #ifdef AeroQuadMine
   Accel_AeroQuadMini accel;
@@ -492,6 +490,7 @@
 // ********************** Setup AeroQuad **********************
 // ************************************************************
 void setup() {
+  Serial.begin(115200);
   SERIAL_BEGIN(BAUD);
   pinMode(LEDPIN, OUTPUT);
   digitalWrite(LEDPIN, LOW);
@@ -623,9 +622,7 @@ void setup() {
     Serial2.begin(57600);
   #endif
   
-  #ifdef UAVTALK
-    UAVTalkSetup(); // defined in UAVTalk.pde
-  #endif
+  UAVTalkSetup(); // defined in UAVTalk.pde
   
   // AKA use a new low pass filter called a Lag Filter uncomment only if using DCM LAG filters
   //  setupFilters(accel.accelOneG);
@@ -839,12 +836,10 @@ void loop () {
       }
       // Listen for configuration commands and reports telemetry
       if (telemetryLoop == ON) {
-        #ifdef UAVTALK
-          UAVTalkProcess(); // defined in UAVTalk.pde
-        #else
-          readSerialCommand(); // defined in SerialCom.pde
-          sendSerialTelemetry(); // defined in SerialCom.pde
-        #endif
+        
+        UAVTalkProcess(); // defined in UAVTalk.pde
+        //readSerialCommand(); // defined in SerialCom.pde
+        //sendSerialTelemetry(); // defined in SerialCom.pde
       }
       
       #ifdef MAX7456_OSD
